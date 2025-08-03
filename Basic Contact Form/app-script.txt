@@ -1,0 +1,204 @@
+/**
+ * Basic Portfolio Contact Form Handler
+ * Perfect for students, freshers, and developers
+ */
+function doPost(e) {
+  
+  var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';  // Replace with YOUR Google Sheet ID
+  
+ 
+  var YOUR_EMAIL = 'your-email@gmail.com';  // Replace with YOUR email address
+  
+  var YOUR_NAME = 'Full Name'; // Replace with YOUR name
+  
+  // Optional: Replace with your portfolio URL
+  var PORTFOLIO_URL = 'https://your-portfolio-site.com';
+
+  try {
+    // Connect to Google Sheet
+    var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    var sheet = ss.getSheetByName('Sheet1'); // Make sure sheet name matches
+
+    // Extract form data
+    var name = e.parameter.name || '';
+    var email = e.parameter.email || '';
+    var subject = e.parameter.subject || 'No Subject';
+    var message = e.parameter.message || '';
+
+    // Validate required fields
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      return ContentService.createTextOutput("Please fill in all required fields!");
+    }
+
+    // Store data in Google Sheet
+    sheet.appendRow([
+      new Date(), // Timestamp
+      name.trim(),
+      email.trim(),
+      subject.trim(),
+      message.trim()
+    ]);
+
+    // Send Thank You Email to Visitor
+    var visitorSubject = "Thanks for reaching out!";
+    var visitorBody = createVisitorEmailTemplate(name, message, YOUR_NAME, PORTFOLIO_URL);
+    
+    MailApp.sendEmail({
+      to: email,
+      subject: visitorSubject,
+      htmlBody: visitorBody
+    });
+
+    // Send Notification Email to You
+    var ownerSubject = `New Contact Form Submission: ${subject}`;
+    var ownerBody = createOwnerEmailTemplate(name, email, subject, message, SPREADSHEET_ID);
+    
+    MailApp.sendEmail({
+      to: YOUR_EMAIL,
+      subject: ownerSubject,
+      htmlBody: ownerBody
+    });
+
+    return ContentService.createTextOutput("Message sent successfully! I'll get back to you soon.");
+
+  } catch (error) {
+    console.error('Contact form error:', error);
+    return ContentService.createTextOutput("Something went wrong. Please try again or email me directly.");
+  }
+}
+
+/**
+ * Thank You Email Template for Visitors
+ */
+function createVisitorEmailTemplate(name, message, yourName, portfolioUrl) {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: white; padding: 30px 20px; border: 1px solid #e0e0e0; border-top: none; }
+            .message-box { background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; margin: 20px 0; border-radius: 4px; }
+            .footer { background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 8px 8px; font-size: 14px; color: #666; }
+            .btn { display: inline-block; background: #667eea; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+            .btn:hover { background: #5a6fd8; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Thanks for Getting in Touch!</h1>
+            </div>
+            <div class="content">
+                <p>Hi <strong>${name}</strong>,</p>
+                
+                <p>Thank you for reaching out through my portfolio! Your message has been received successfully.</p>
+                
+                <div class="message-box">
+                    <strong>Your message:</strong><br>
+                    <em>"${message.length > 200 ? message.substring(0, 200) + '...' : message}"</em>
+                </div>
+                
+                <p>I really appreciate you taking the time to contact me. I'll review your message and get back to you as soon as possible, usually within 24-48 hours.</p>
+                
+                <p>In the meantime, feel free to:</p>
+                <ul>
+                    <li>Explore more of my work on my <a href="${portfolioUrl}" style="color: #667eea;">portfolio</a></li>
+                    <li>Connect with me on social media</li>
+                    <li>Check out my latest projects</li>
+                </ul>
+                
+                <p>Looking forward to our conversation!</p>
+                
+                <p>Best regards,<br>
+                <strong>${yourName}</strong></p>
+            </div>
+            <div class="footer">
+                <p>This email was sent automatically from my portfolio contact form.</p>
+                <p>Please don't reply to this email. I'll respond from my personal email soon!</p>
+            </div>
+        </div>
+    </body>
+    </html>
+  `;
+}
+
+/**
+ * Notification Email Template for You
+ */
+function createOwnerEmailTemplate(name, email, subject, message, sheetId) {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+            .header { background: #28a745; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: white; padding: 30px; border: 1px solid #e0e0e0; border-top: none; }
+            .info-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            .info-table th { background: #f8f9fa; padding: 12px; text-align: left; border: 1px solid #dee2e6; font-weight: 600; }
+            .info-table td { padding: 12px; border: 1px solid #dee2e6; }
+            .message-section { background: #f8f9fa; padding: 20px; border-radius: 6px; margin: 20px 0; }
+            .footer { background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 8px 8px; }
+            .btn { display: inline-block; background: #007bff; color: white !important; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px; }
+            .btn:hover { color: white !important; }
+            .btn.green { background: #28a745; }
+            .priority { color: #dc3545; font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1> New Portfolio Contact!</h1>
+                <p>Someone is interested in your work</p>
+            </div>
+            <div class="content">
+                <p><strong>You have a new contact form submission from your portfolio!</strong></p>
+                
+                <table class="info-table">
+                    <tr>
+                        <th style="width: 30%;">Contact Info</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Name</strong></td>
+                        <td>${name}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td><a href="mailto:${email}" style="color: #007bff;">${email}</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Subject</strong></td>
+                        <td>${subject}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Submitted</strong></td>
+                        <td>${new Date().toLocaleString()}</td>
+                    </tr>
+                </table>
+                
+                <div class="message-section">
+                    <h3>Their Message:</h3>
+                    <p style="background: white; padding: 15px; border-radius: 4px; border-left: 4px solid #007bff;">${message}</p>
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="mailto:${email}?subject=Re: ${subject}" class="btn">Reply to ${name}</a>
+                    <a href="https://docs.google.com/spreadsheets/d/${sheetId}" class="btn green">View All Submissions</a>
+                </div>
+            
+            </div>
+            <div class="footer">
+                <p> All submissions are automatically saved to your <a href="https://docs.google.com/spreadsheets/d/${sheetId}">Google Sheet</a></p>
+            </div>
+        </div>
+    </body>
+    </html>
+  `;
+}
