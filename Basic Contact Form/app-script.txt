@@ -5,14 +5,12 @@
 function doPost(e) {
   
   var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';  // Replace with YOUR Google Sheet ID
-  
  
   var YOUR_EMAIL = 'your-email@gmail.com';  // Replace with YOUR email address
   
   var YOUR_NAME = 'Full Name'; // Replace with YOUR name
   
-  // Optional: Replace with your portfolio URL
-  var PORTFOLIO_URL = 'https://your-portfolio-site.com';
+  var PORTFOLIO_URL = 'https://your-portfolio-site.com'; // Optional: Replace with your portfolio URL
 
   try {
     // Connect to Google Sheet
@@ -32,7 +30,7 @@ function doPost(e) {
 
     // Store data in Google Sheet
     sheet.appendRow([
-      new Date(), // Timestamp
+      new Date(),
       name.trim(),
       email.trim(),
       subject.trim(),

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speaker Feedback</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #ff9a9e 0%,
+          #fecfef 50%,
+          #fecfef 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .feedback-container {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        color: #2d3748;
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+
+      .header p {
+        color: #718096;
+        font-size: 16px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #2d3748;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .optional {
+        color: #718096;
+        font-weight: 400;
+      }
+
+      .required {
+        color: #e53e3e;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      select {
+        cursor: pointer;
+      }
+
+      .radio-group {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+      }
+
+      .radio-option {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .radio-option input[type="radio"] {
+        width: auto;
+        margin: -5px 5px 0 0;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      }
+
+      .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ffffff40;
+        border-top: 2px solid #ffffff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .response {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 500;
+      }
+
+      .success {
+        background: #f0fff4;
+        color: #22543d;
+        border: 1px solid #c6f6d5;
+      }
+
+      .error {
+        background: #fed7d7;
+        color: #742a2a;
+        border: 1px solid #feb2b2;
+      }
+
+      .form-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #718096;
+        font-size: 14px;
+      }
+
+      @media (max-width: 480px) {
+        .feedback-container {
+          padding: 30px 20px;
+        }
+
+        .header h1 {
+          font-size: 24px;
+        }
+
+        .radio-group {
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="feedback-container">
+      <div class="header">
+        <h1>Share Your Feedback</h1>
+        <p>Your insights help me improve future sessions</p>
+      </div>
+
+      <form id="feedback-form">
+        <div class="form-group">
+          <label for="name"
+            >Name <span class="optional">(Optional)</span></label
+          >
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Your name (or leave blank for anonymous feedback)"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email"
+            >Email Address <span class="required">*</span></label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="your.email@example.com"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="what_liked"
+            >What did you like the most?
+            <span class="optional">(Optional)</span></label
+          >
+          <textarea
+            id="what_liked"
+            name="what_liked"
+            placeholder="What resonated with you? What was most valuable?"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="suggestions"
+            >Suggestions for improvement
+            <span class="optional">(Optional)</span></label
+          >
+          <textarea
+            id="suggestions"
+            name="suggestions"
+            placeholder="How can I make future sessions even better?"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label
+            >Would you attend another session?
+            <span class="optional">(Optional)</span></label
+          >
+          <div class="radio-group">
+            <div class="radio-option">
+              <input
+                type="radio"
+                id="attend_yes"
+                name="attend_again"
+                value="Yes"
+              />
+              <label for="attend_yes">✅ Yes, definitely!</label>
+            </div>
+            <div class="radio-option">
+              <input
+                type="radio"
+                id="attend_no"
+                name="attend_again"
+                value="No"
+              />
+              <label for="attend_no">❌ Not likely</label>
+            </div>
+            <div class="radio-option">
+              <input
+                type="radio"
+                id="attend_maybe"
+                name="attend_again"
+                value="Maybe"
+              />
+              <label for="attend_maybe">🤔 Maybe</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">
+          Submit Feedback
+        </button>
+
+        <div id="response"></div>
+
+        <div class="form-footer">
+          <p>🙏 Thank you for taking the time to share your thoughts!</p>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById("feedback-form");
+      const responseEl = document.getElementById("response");
+      const submitBtn = document.getElementById("submit-btn");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="loading"></span>Submitting...';
+        responseEl.innerHTML = "";
+
+        // Prepare form data
+        const formData = new FormData(form);
+        const data = new URLSearchParams(formData);
+
+        try {
+          const response = await fetch(
+            "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE", // Replace with your Apps Script URL
+            {
+              method: "POST",
+              body: data,
+            }
+          );
+
+          const result = await response.text();
+
+          // Show success message
+          responseEl.className = "response success";
+          responseEl.innerHTML = "✅ " + result;
+          form.reset();
+        } catch (error) {
+          // Show error message
+          responseEl.className = "response error";
+          responseEl.innerHTML = "Something went wrong. Please try again!";
+          console.error("Error:", error);
+        } finally {
+          // Reset button
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "Submit Feedback";
+        }
+      });
+
+      // Add some interactive feedback
+      const inputs = document.querySelectorAll("input, textarea");
+      inputs.forEach((input) => {
+        input.addEventListener("focus", function () {
+          this.style.borderColor = "#ff6b6b";
+        });
+
+        input.addEventListener("blur", function () {
+          if (!this.value) {
+            this.style.borderColor = "#e2e8f0";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
