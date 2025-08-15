@@ -118,6 +118,51 @@
         margin: -5px 5px 0 0;
       }
 
+      /* Rating Stars Styling */
+      .rating-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+
+      .stars-container {
+        display: flex;
+        gap: 5px;
+      }
+
+      .star {
+        font-size: 28px;
+        color: #e2e8f0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+      }
+
+      .star:hover {
+        transform: scale(1.1);
+      }
+
+      .star.filled {
+        color: #ffd700;
+      }
+
+      .star.hover {
+        color: #ffed4a;
+      }
+
+      .rating-text {
+        font-size: 14px;
+        color: #718096;
+        min-width: 100px;
+      }
+
+      .rating-selected {
+        color: #ff6b6b;
+        font-weight: 600;
+      }
+
       .submit-btn {
         width: 100%;
         padding: 16px;
@@ -203,6 +248,19 @@
           flex-direction: column;
           gap: 10px;
         }
+
+        .rating-group {
+          justify-content: center;
+          text-align: center;
+        }
+
+        .stars-container {
+          justify-content: center;
+        }
+
+        .star {
+          font-size: 24px;
+        }
       }
     </style>
   </head>
@@ -237,6 +295,21 @@
             placeholder="your.email@example.com"
             required
           />
+        </div>
+
+        <div class="form-group">
+          <label>Overall Rating <span class="optional">(Optional)</span></label>
+          <div class="rating-group">
+            <div class="stars-container">
+              <span class="star" data-rating="1">★</span>
+              <span class="star" data-rating="2">★</span>
+              <span class="star" data-rating="3">★</span>
+              <span class="star" data-rating="4">★</span>
+              <span class="star" data-rating="5">★</span>
+            </div>
+            <div class="rating-text" id="rating-text">Click to rate</div>
+          </div>
+          <input type="hidden" id="rating" name="rating" value="" />
         </div>
 
         <div class="form-group">
@@ -315,6 +388,55 @@
       const form = document.getElementById("feedback-form");
       const responseEl = document.getElementById("response");
       const submitBtn = document.getElementById("submit-btn");
+      const stars = document.querySelectorAll(".star");
+      const ratingText = document.getElementById("rating-text");
+      const ratingInput = document.getElementById("rating");
+
+      // Rating functionality
+      let currentRating = 0;
+
+      const ratingLabels = {
+        1: " Poor",
+        2: " Fair",
+        3: " Good",
+        4: " Very Good",
+        5: " Excellent",
+      };
+
+      stars.forEach((star, index) => {
+        star.addEventListener("mouseenter", () => {
+          highlightStars(index + 1);
+          ratingText.textContent = ratingLabels[index + 1];
+          ratingText.classList.add("rating-selected");
+        });
+
+        star.addEventListener("mouseleave", () => {
+          highlightStars(currentRating);
+          if (currentRating === 0) {
+            ratingText.textContent = "Click to rate";
+            ratingText.classList.remove("rating-selected");
+          } else {
+            ratingText.textContent = ratingLabels[currentRating];
+          }
+        });
+
+        star.addEventListener("click", () => {
+          currentRating = index + 1;
+          ratingInput.value = currentRating;
+          highlightStars(currentRating);
+          ratingText.textContent = ratingLabels[currentRating];
+          ratingText.classList.add("rating-selected");
+        });
+      });
+
+      function highlightStars(rating) {
+        stars.forEach((star, index) => {
+          star.classList.remove("filled", "hover");
+          if (index < rating) {
+            star.classList.add("filled");
+          }
+        });
+      }
 
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
@@ -330,7 +452,7 @@
 
         try {
           const response = await fetch(
-            "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE", // Replace with your Apps Script URL
+            "https://script.google.com/macros/s/AKfycbx7N4wuI58-R3EQR_8v9lvwStgSzHMqegGtJtcZ6bBiTK4AfqPjgYeymM3JkH_5xuhe/exec", // Replace with your Apps Script URL
             {
               method: "POST",
               body: data,
@@ -343,19 +465,24 @@
           responseEl.className = "response success";
           responseEl.innerHTML = "✅ " + result;
           form.reset();
+
+          // Reset rating
+          currentRating = 0;
+          ratingInput.value = "";
+          highlightStars(0);
+          ratingText.textContent = "Click to rate";
+          ratingText.classList.remove("rating-selected");
         } catch (error) {
           // Show error message
           responseEl.className = "response error";
           responseEl.innerHTML = "Something went wrong. Please try again!";
           console.error("Error:", error);
         } finally {
-          // Reset button
           submitBtn.disabled = false;
           submitBtn.innerHTML = "Submit Feedback";
         }
       });
 
-      // Add some interactive feedback
       const inputs = document.querySelectorAll("input, textarea");
       inputs.forEach((input) => {
         input.addEventListener("focus", function () {
