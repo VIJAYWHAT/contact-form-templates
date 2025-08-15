@@ -28,4 +28,4 @@ No backend server, no SMTP setup — store messages in Google Sheets, get them i
 
 ### 📜 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. - Free to use, modify, and share.
