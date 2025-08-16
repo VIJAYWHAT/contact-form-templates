@@ -3,84 +3,112 @@
  * Perfect for public speakers and workshop trainers
  */
 function doPost(e) {
+  var SPREADSHEET_ID = "YOUR_SPREADSHEET_ID_HERE"; // Replace with YOUR Google Sheet ID
 
-  var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE'; // Replace with YOUR Google Sheet ID
-  
-  var YOUR_EMAIL = 'your-email@gmail.com';   // Replace with YOUR email address
-  
-  var YOUR_NAME = 'Your Full Name';  // Replace with YOUR name
+  var YOUR_EMAIL = "your-email@gmail.com"; // Replace with YOUR email address
 
-  var SPEAKER_WEBSITE = 'https://your-speaker-website.com';  // Replace with your speaker profile or website
-  
-  var LINKEDIN_URL = 'https://linkedin.com/in/your-profile';  // Replace with your LinkedIn profile URL
-  
+  var YOUR_NAME = "Your Full Name"; // Replace with YOUR name
+
+  var SPEAKER_WEBSITE = "https://your-speaker-website.com"; // Replace with your speaker profile or website
+
+  var LINKEDIN_URL = "https://linkedin.com/in/your-profile"; // Replace with your LinkedIn profile URL
+
   // Replace with session materials link (leave empty if no materials)
-  var SESSION_MATERIALS = 'https://drive.google.com/your-materials-link';  
+  var SESSION_MATERIALS = "https://drive.google.com/your-materials-link";
 
   try {
     // Connect to Google Sheet
     var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    var sheet = ss.getSheetByName('Sheet1'); // Make sure sheet name matches
+    var sheet = ss.getSheetByName("Sheet1"); // Make sure sheet name matches
 
     // Extract form data
-    var name = e.parameter.name || 'Anonymous';
-    var email = e.parameter.email || '';
-    var whatLiked = e.parameter.what_liked || '';
-    var suggestions = e.parameter.suggestions || '';
-    var attendAgain = e.parameter.attend_again || '';
+    var name = e.parameter.name || "Anonymous";
+    var email = e.parameter.email || "";
+    var rating = e.parameter.rating || "";
+    var whatLiked = e.parameter.what_liked || "";
+    var suggestions = e.parameter.suggestions || "";
+    var attendAgain = e.parameter.attend_again || "";
 
     // Validate required fields (only email is required)
     if (!email.trim()) {
-      return ContentService.createTextOutput("Please provide your email address!");
+      return ContentService.createTextOutput(
+        "Please provide your email address!"
+      );
     }
 
-    // Store data in Google Sheet
+    // Store data in Google Sheet (updated to include rating)
     sheet.appendRow([
       new Date(),
       name.trim(),
       email.trim(),
+      rating,
       whatLiked.trim(),
       suggestions.trim(),
-      attendAgain
+      attendAgain,
     ]);
 
     // Send Thank You Email to Attendee
     var attendeeSubject = "Thank you for your feedback!";
-    var attendeeBody = createAttendeeEmailTemplate(name, YOUR_NAME, SPEAKER_WEBSITE, LINKEDIN_URL, SESSION_MATERIALS);
-    
+    var attendeeBody = createAttendeeEmailTemplate(
+      name,
+      YOUR_NAME,
+      SPEAKER_WEBSITE,
+      LINKEDIN_URL,
+      SESSION_MATERIALS
+    );
+
     MailApp.sendEmail({
       to: email,
       subject: attendeeSubject,
-      htmlBody: attendeeBody
+      htmlBody: attendeeBody,
     });
 
     // Send Feedback Notification Email to You
-    var speakerSubject = `New Speaker Feedback from ${name !== 'Anonymous' ? name : 'an attendee'}`;
-    var speakerBody = createSpeakerEmailTemplate(name, email, whatLiked, suggestions, attendAgain, SPREADSHEET_ID);
-    
+    var speakerSubject = `New Speaker Feedback from ${
+      name !== "Anonymous" ? name : "an attendee"
+    }`;
+    var speakerBody = createSpeakerEmailTemplate(
+      name,
+      email,
+      rating,
+      whatLiked,
+      suggestions,
+      attendAgain,
+      SPREADSHEET_ID
+    );
+
     MailApp.sendEmail({
       to: YOUR_EMAIL,
       subject: speakerSubject,
-      htmlBody: speakerBody
+      htmlBody: speakerBody,
     });
 
-    return ContentService.createTextOutput("Thank you for your valuable feedback! Your insights help me improve.");
-
+    return ContentService.createTextOutput(
+      "Thank you for your valuable feedback! Your insights help me improve."
+    );
   } catch (error) {
-    console.error('Feedback form error:', error);
-    return ContentService.createTextOutput("Something went wrong. Please try again or email me directly.");
+    console.error("Feedback form error:", error);
+    return ContentService.createTextOutput(
+      "Something went wrong. Please try again or email me directly."
+    );
   }
 }
 
 /**
  * Thank You Email Template for Attendees
  */
-function createAttendeeEmailTemplate(name, speakerName, speakerWebsite, linkedinUrl, sessionMaterials) {
-  var greeting = name !== 'Anonymous' ? `Hi ${name}` : 'Hi there';
-  
+function createAttendeeEmailTemplate(
+  name,
+  speakerName,
+  speakerWebsite,
+  linkedinUrl,
+  sessionMaterials
+) {
+  var greeting = name !== "Anonymous" ? `Hi ${name}` : "Hi there";
+
   // Check if session materials link is provided
-  var hasMaterials = sessionMaterials && sessionMaterials.trim() !== '';
-  
+  var hasMaterials = sessionMaterials && sessionMaterials.trim() !== "";
+
   return `
     <!DOCTYPE html>
     <html>
@@ -132,7 +160,11 @@ function createAttendeeEmailTemplate(name, speakerName, speakerWebsite, linkedin
                 <div style="text-align: center; margin: 25px 0;">
                     <a href="${speakerWebsite}" class="btn">Visit My Website</a>
                     <a href="${linkedinUrl}" class="btn btn-linkedin">Connect on LinkedIn</a>
-                    ${hasMaterials ? `<a href="${sessionMaterials}" class="btn btn-materials">Download Session Materials</a>` : ''}
+                    ${
+                      hasMaterials
+                        ? `<a href="${sessionMaterials}" class="btn btn-materials">Download Session Materials</a>`
+                        : ""
+                    }
                 </div>
                 
                 <p>Thank you again for being such an engaged participant. I hope to see you at future events!</p>
@@ -153,10 +185,41 @@ function createAttendeeEmailTemplate(name, speakerName, speakerWebsite, linkedin
 /**
  * Feedback Notification Email Template for Speaker
  */
-function createSpeakerEmailTemplate(name, email, whatLiked, suggestions, attendAgain, sheetId) {
-  var attendAgainIcon = attendAgain === 'Yes' ? '✅' : attendAgain === 'No' ? '❌' : '❓';
-  var attendAgainColor = attendAgain === 'Yes' ? '#28a745' : attendAgain === 'No' ? '#dc3545' : '#6c757d';
-  
+function createSpeakerEmailTemplate(
+  name,
+  email,
+  rating,
+  whatLiked,
+  suggestions,
+  attendAgain,
+  sheetId
+) {
+  var attendAgainIcon =
+    attendAgain === "Yes" ? "✅" : attendAgain === "No" ? "❌" : "❓";
+  var attendAgainColor =
+    attendAgain === "Yes"
+      ? "#28a745"
+      : attendAgain === "No"
+      ? "#dc3545"
+      : "#6c757d";
+
+  // Format rating display
+  var ratingDisplay = "";
+  var ratingColor = "#6c757d";
+
+  if (rating) {
+    var ratingNum = parseInt(rating);
+    var stars = "★".repeat(ratingNum) + "☆".repeat(5 - ratingNum);
+
+    if (ratingNum >= 4) ratingColor = "#28a745"; // Green for 4-5 stars
+    else if (ratingNum >= 3) ratingColor = "#ffc107"; // Yellow for 3 stars
+    else ratingColor = "#dc3545"; // Red for 1-2 stars
+
+    ratingDisplay = `<span style="color: ${ratingColor}; font-size: 18px;">${stars}</span> (${ratingNum}/5)`;
+  } else {
+    ratingDisplay = '<span style="color: #6c757d;">Not provided</span>';
+  }
+
   return `
     <!DOCTYPE html>
     <html>
@@ -203,8 +266,14 @@ function createSpeakerEmailTemplate(name, email, whatLiked, suggestions, attendA
                         <td><a href="mailto:${email}" style="color: #007bff;">${email}</a></td>
                     </tr>
                     <tr>
+                        <td><strong>Rating</strong></td>
+                        <td>${ratingDisplay}</td>
+                    </tr>
+                    <tr>
                         <td><strong>Would Attend Again?</strong></td>
-                        <td><span style="background: ${attendAgainColor}; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px;">${attendAgainIcon} ${attendAgain || 'Not specified'}</span></td>
+                        <td><span style="background: ${attendAgainColor}; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px;">${attendAgainIcon} ${
+    attendAgain || "Not specified"
+  }</span></td>
                     </tr>
                     <tr>
                         <td><strong>Submitted</strong></td>
@@ -212,19 +281,27 @@ function createSpeakerEmailTemplate(name, email, whatLiked, suggestions, attendA
                     </tr>
                 </table>
                 
-                ${whatLiked ? `
+                ${
+                  whatLiked
+                    ? `
                 <div class="feedback-section positive-feedback">
                     <h3>🌟 What They Liked Most:</h3>
                     <p style="background: white; padding: 15px; border-radius: 4px; margin: 10px 0;">"${whatLiked}"</p>
                 </div>
-                ` : ''}
+                `
+                    : ""
+                }
                 
-                ${suggestions ? `
+                ${
+                  suggestions
+                    ? `
                 <div class="feedback-section improvement-feedback">
                     <h3>💡 Suggestions for Improvement:</h3>
                     <p style="background: white; padding: 15px; border-radius: 4px; margin: 10px 0;">"${suggestions}"</p>
                 </div>
-                ` : ''}
+                `
+                    : ""
+                }
                 
                 <div style="text-align: center; margin: 30px 0;">
                     <a href="mailto:${email}?subject=Thank you for your feedback!" class="btn btn-primary">Send Personal Thank You</a>
