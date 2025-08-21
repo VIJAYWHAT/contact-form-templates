@@ -456,7 +456,7 @@
 
         try {
           const response = await fetch(
-            "https://script.google.com/macros/s/AKfycbwHpJJgCr6CMkR8hGiJpoBs01X5K3o-K7zg1f1TidtmQMyXCGrFvvvvNow52-sjJ9wO/exec", // Replace with your Apps Script URL
+            "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE", // Replace with your Apps Script URL
             {
               method: "POST",
               body: data,
@@ -466,7 +466,6 @@
           responseEl.className = "response success";
           responseEl.innerHTML = "✅ " + result;
           form.reset();
-          // Reset minimum date
           document.getElementById("preferred_date").min = today;
         } catch (error) {
           responseEl.className = "response error";

@@ -84,7 +84,8 @@ function doPost(e) {
       subject,
       preferredDateTime,
       additionalNotes,
-      SPREADSHEET_ID
+      SPREADSHEET_ID,
+      YOUR_NAME
     );
 
     MailApp.sendEmail({
@@ -155,7 +156,7 @@ function createParentEmailTemplate(
     <body>
         <div class="container">
             <div class="header">
-                <h1>📚 Tutoring Session Request Received!</h1>
+                <h1>Tutoring Session Request Received!</h1>
                 <p>Thank you for choosing personalized learning</p>
             </div>
             <div class="content">
@@ -164,7 +165,7 @@ function createParentEmailTemplate(
                 <p>Thank you for submitting a tutoring session request for <strong>${studentName}</strong>! I'm excited to help with their ${subject} learning journey.</p>
                 
                 <div class="booking-summary">
-                    <h3>📋 Session Request Summary</h3>
+                    <h3> Session Request Summary</h3>
                     <div class="booking-item"><strong>Student:</strong> ${studentName}</div>
                     <div class="booking-item"><strong>Subject:</strong> ${subject}</div>
                     <div class="booking-item"><strong>Preferred Time:</strong> ${preferredDateTime}</div>
@@ -188,7 +189,7 @@ function createParentEmailTemplate(
                 </div>
                 
                 <div class="tutor-info">
-                    <h3>📞 Contact Information</h3>
+                    <h3> Contact Information</h3>
                     <ul>
                         <li>🌐 Website: <a href="${website}">${website}</a></li>
                         <li>📧 Email: Reply to this email anytime</li>
@@ -226,7 +227,8 @@ function createTutorEmailTemplate(
   subject,
   preferredDateTime,
   additionalNotes,
-  sheetId
+  sheetId,
+  yourName
 ) {
   var phoneText = parentPhone ? parentPhone : "Not provided";
   var notesText = additionalNotes ? additionalNotes : "None provided";
@@ -320,9 +322,9 @@ function createTutorEmailTemplate(
                 }
                 
                 <div class="btn-group">
-                    <a href="mailto:${parentEmail}?subject=Tutoring Session Confirmation for ${studentName}&body=Hi,%0D%0A%0D%0AThank you for your interest in ${subject} tutoring for ${studentName}. I've received your request for ${preferredDateTime}.%0D%0A%0D%0AI'm excited to help ${studentName} with their learning goals. Let me confirm a few details:%0D%0A%0D%0A• Session Date/Time: ${preferredDateTime}%0D%0A• Subject Focus: ${subject}%0D%0A• Location: [Please specify: Online via Zoom or In-person]%0D%0A• Session Duration: [Usually 1-2 hours]%0D%0A%0D%0APlease reply to confirm these details and we can get started!%0D%0A%0D%0ABest regards," class="btn btn-primary">Confirm Session</a>
+                    <a href="mailto:${parentEmail}?subject=Tutoring Session Confirmation for ${studentName}&body=Hi,%0D%0A%0D%0AThank you for your interest in ${subject} tutoring for ${studentName}. I've received your request for ${preferredDateTime}.%0D%0A%0D%0AI'm excited to help ${studentName} with their learning goals. Let me confirm a few details:%0D%0A%0D%0A• Session Date/Time: ${preferredDateTime}%0D%0A• Subject Focus: ${subject}%0D%0A• Location: [Please specify: Online via Zoom or In-person]%0D%0A• Session Duration: [Usually 1-2 hours]%0D%0A%0D%0APlease reply to confirm these details and we can get started!%0D%0A%0D%0ABest regards,%0D%0A%0D%0A${yourName} " class="btn btn-primary">Confirm Session</a>
                     <a href="https://docs.google.com/spreadsheets/d/${sheetId}" class="btn btn-success">View All Bookings</a>
-                    <a href="tel:${parentEmail}" class="btn btn-info">Save Contact</a>
+                    <a href="tel:${parentPhone}" class="btn btn-info">Save Contact</a>
                 </div>
                   
             </div>
