@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Inquiry - Let's Work Together</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #f093fb 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        overflow-x: hidden;
+      }
+      .bg-shapes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+      }
+      .shape {
+        position: absolute;
+        opacity: 0.1;
+        animation: float 20s infinite ease-in-out;
+      }
+      .shape:nth-child(1) {
+        top: 10%;
+        left: 20%;
+        width: 80px;
+        height: 80px;
+        background: #fff;
+        border-radius: 50%;
+        animation-delay: 0s;
+      }
+      .shape:nth-child(2) {
+        top: 70%;
+        left: 80%;
+        width: 60px;
+        height: 60px;
+        background: #fff;
+        border-radius: 12px;
+        animation-delay: 7s;
+      }
+      .shape:nth-child(3) {
+        top: 40%;
+        left: 10%;
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        animation-delay: 14s;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        33% {
+          transform: translateY(-30px) rotate(120deg);
+        }
+        66% {
+          transform: translateY(20px) rotate(240deg);
+        }
+      }
+      .inquiry-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        max-width: 650px;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      .header h1 {
+        color: #2d3748;
+        font-size: 32px;
+        margin-bottom: 8px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .header p {
+        color: #4a5568;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+      .header .subtitle {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #2d3748;
+        font-weight: 600;
+        font-size: 15px;
+      }
+      .required {
+        color: #e53e3e;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        background: rgba(255, 255, 255, 0.9);
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-2px);
+      }
+      textarea {
+        resize: vertical;
+        min-height: 120px;
+        line-height: 1.6;
+      }
+      select {
+        cursor: pointer;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 12px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      .submit-btn {
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+      }
+      .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .submit-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+      .submit-btn:hover::before {
+        left: 100%;
+      }
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ffffff40;
+        border-top: 2px solid #ffffff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .response {
+        margin-top: 20px;
+        padding: 18px;
+        border-radius: 12px;
+        text-align: center;
+        font-weight: 500;
+      }
+      .success {
+        background: linear-gradient(135deg, #48bb78, #38a169);
+        color: white;
+        border: 1px solid #38a169;
+      }
+      .error {
+        background: linear-gradient(135deg, #f56565, #e53e3e);
+        color: white;
+        border: 1px solid #e53e3e;
+      }
+      .form-footer {
+        text-align: center;
+        margin-top: 25px;
+        color: #4a5568;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .form-footer .contact-info {
+        margin-top: 15px;
+        padding: 15px;
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 12px;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+      }
+      .form-footer a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .form-footer a:hover {
+        text-decoration: underline;
+      }
+      @media (max-width: 768px) {
+        .inquiry-container {
+          padding: 30px 20px;
+        }
+        .header h1 {
+          font-size: 28px;
+        }
+      }
+      @media (max-width: 480px) {
+        .inquiry-container {
+          padding: 25px 15px;
+        }
+        .header h1 {
+          font-size: 24px;
+        }
+        .header p {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-shapes">
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+
+    <div class="inquiry-container">
+      <div class="header">
+        <h1>Let's Create Something Amazing</h1>
+        <p>Tell me about your project and let's bring your vision to life!</p>
+        <div class="subtitle">Free Project Consultation</div>
+      </div>
+
+      <form id="inquiry-form">
+        <div class="form-group">
+          <label for="name">Your Name <span class="required">*</span></label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="John Smith"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email"
+            >Email Address <span class="required">*</span></label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="john@company.com"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="company">Company/Organization</label>
+          <input
+            type="text"
+            id="company"
+            name="company"
+            placeholder="Your Company Name (Optional)"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="project_type"
+            >Project Type <span class="required">*</span></label
+          >
+          <select id="project_type" name="project_type" required>
+            <option value="">Select your project type</option>
+            <option value="Website Development">🌐 Website Development</option>
+            <option value="Mobile App Development">
+              📱 Mobile App Development
+            </option>
+            <option value="Web App Development">💻 Web App Development</option>
+            <option value="Logo Design">🎨 Logo Design</option>
+            <option value="Brand Identity">✨ Brand Identity</option>
+            <option value="UI/UX Design">🎭 UI/UX Design</option>
+            <option value="E-commerce Store">🛒 E-commerce Store</option>
+            <option value="SEO Services">📈 SEO Services</option>
+            <option value="Content Writing">✍️ Content Writing</option>
+            <option value="Digital Marketing">📊 Digital Marketing</option>
+            <option value="Consulting">🤝 Consulting</option>
+            <option value="Other">❓ Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="budget_range"
+            >Budget Range <span class="required">*</span></label
+          >
+          <input
+            type="text"
+            id="budget_range"
+            name="budget_range"
+            placeholder="e.g. ₹50,000 - ₹1,00,000"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="timeline">Project Timeline</label>
+          <select id="timeline" name="timeline">
+            <option value="">When do you need this completed?</option>
+            <option value="ASAP (Rush Job)">⚡ ASAP (Rush Job)</option>
+            <option value="Within 2 weeks">🏃‍♂️ Within 2 weeks</option>
+            <option value="Within 1 month">📅 Within 1 month</option>
+            <option value="1-2 months">⏰ 1-2 months</option>
+            <option value="2-3 months">📆 2-3 months</option>
+            <option value="3+ months">🗓️ 3+ months</option>
+            <option value="Flexible">🤷‍♂️ Flexible</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="project_description"
+            >Project Description <span class="required">*</span></label
+          >
+          <textarea
+            id="project_description"
+            name="project_description"
+            required
+            placeholder="Please describe your project in detail. Include:
+• What you want to achieve
+• Target audience
+• Key features or requirements
+• Any inspiration or references
+• Specific goals or objectives"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="additional_info">Additional Information</label>
+          <textarea
+            id="additional_info"
+            name="additional_info"
+            placeholder="Any other details, questions, or special requirements?"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">
+          Send Project Inquiry
+        </button>
+        <div id="response"></div>
+
+        <div class="form-footer">
+          <p>
+            I'll review your project details and get back to you within 24 hours
+            with a detailed proposal, timeline, and next steps.
+          </p>
+          <div class="contact-info">
+            <p>
+              📧 Questions? Email me directly:
+              <a href="mailto:your-email@domain.com">your-email@domain.com</a>
+            </p>
+            <p>
+              💼 Portfolio:
+              <a href="https://your-portfolio.com" target="_blank"
+                >your-portfolio.com</a
+              >
+            </p>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById("inquiry-form");
+      const responseEl = document.getElementById("response");
+      const submitBtn = document.getElementById("submit-btn");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="loading"></span>Sending Inquiry...';
+        responseEl.innerHTML = "";
+
+        const formData = new FormData(form);
+        const data = new URLSearchParams(formData);
+
+        try {
+          const response = await fetch(
+            "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE", // Replace with your Apps Script URL
+            {
+              method: "POST",
+              body: data,
+            }
+          );
+          const result = await response.text();
+          responseEl.className = "response success";
+          responseEl.innerHTML = "✅ " + result;
+          form.reset();
+        } catch (error) {
+          responseEl.className = "response error";
+          responseEl.innerHTML =
+            "❌ Something went wrong. Please try again or email me directly!";
+          console.error("Error:", error);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "Send Project Inquiry";
+        }
+      });
+
+      const inputs = document.querySelectorAll("input, textarea, select");
+      inputs.forEach((input) => {
+        input.addEventListener("focus", function () {
+          this.style.borderColor = "#667eea";
+        });
+        input.addEventListener("blur", function () {
+          if (!this.value) {
+            this.style.borderColor = "#e2e8f0";
+          }
+        });
+      });
+
+      form.addEventListener("submit", function () {
+        setTimeout(() => {
+          if (responseEl.classList.contains("success")) {
+            responseEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 500);
+      });
+    </script>
+  </body>
+</html>
