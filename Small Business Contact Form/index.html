@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - Small Business</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        max-width: 600px;
+        width: 100%;
+      }
+
+      h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 32px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+        font-size: 16px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .required {
+        color: #e74c3c;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        font-size: 16px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      select {
+        cursor: pointer;
+        background-color: white;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .response {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .success {
+        background: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+      }
+
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top: 3px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+        vertical-align: middle;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .info-text {
+        font-size: 13px;
+        color: #7f8c8d;
+        margin-top: 5px;
+        font-style: italic;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 30px 20px;
+        }
+
+        h2 {
+          font-size: 26px;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Get in Touch with Our Team</h2>
+      <p class="subtitle">
+        We'd love to hear from you! Fill out the form below.
+      </p>
+
+      <form id="contact-form">
+        <div class="form-group">
+          <label for="fullName"
+            >Full Name <span class="required">*</span></label
+          >
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="John Doe"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email"
+              >Email Address <span class="required">*</span></label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="john@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone"
+              >Phone Number <span class="required">*</span></label
+            >
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="+1 (555) 123-4567"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reason"
+            >Reason for Contact <span class="required">*</span></label
+          >
+          <select id="reason" name="reason" required>
+            <option value="">-- Select a reason --</option>
+            <option value="General Inquiry">General Inquiry</option>
+            <option value="Product Information">Product Information</option>
+            <option value="Service Information">Service Information</option>
+            <option value="Booking / Appointment">Booking / Appointment</option>
+            <option value="Quote Request">Quote Request</option>
+            <option value="Support">Support</option>
+            <option value="Feedback">Feedback</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message"
+            >Your Message <span class="required">*</span></label
+          >
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Tell us more about your inquiry..."
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contactMethod">Preferred Contact Method</label>
+            <select id="contactMethod" name="contactMethod">
+              <option value="Email">Email</option>
+              <option value="Phone">Phone</option>
+              <option value="Either">Either is fine</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="preferredTime">Preferred Time (Optional)</label>
+            <select id="preferredTime" name="preferredTime">
+              <option value="Anytime">Anytime</option>
+              <option value="Morning (9AM - 12PM)">Morning (9AM - 12PM)</option>
+              <option value="Afternoon (12PM - 5PM)">
+                Afternoon (12PM - 5PM)
+              </option>
+              <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
+            </select>
+            <p class="info-text">
+              Help us contact you at the most convenient time
+            </p>
+          </div>
+        </div>
+
+        <button type="submit" id="submit-btn">Send Message</button>
+        <div id="response"></div>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById("contact-form");
+      const responseEl = document.getElementById("response");
+      const submitBtn = document.getElementById("submit-btn");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+          '<span class="loading"></span> Sending your message...';
+        responseEl.innerHTML = "";
+
+        // Prepare form data
+        const formData = new FormData(form);
+        const data = new URLSearchParams(formData);
+
+        try {
+          const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbwnhWrkPQoQBKpf-bvx7ytTEQoF-QA0VCVTqshdRz52cXdmjaGqCOHl8uhnQUKIQequ/exec", // Replace with your Apps Script URL
+            {
+              method: "POST",
+              body: data,
+            }
+          );
+
+          const result = await response.text();
+
+          // Show success message
+          responseEl.className = "response success";
+          responseEl.textContent = result;
+          form.reset();
+
+          // Auto-hide success message after 5 seconds
+          setTimeout(() => {
+            responseEl.style.display = "none";
+          }, 5000);
+        } catch (error) {
+          // Show error message
+          responseEl.className = "response error";
+          responseEl.textContent =
+            "⚠️ Something went wrong. Please try again or contact us directly!";
+          console.error("Error:", error);
+        } finally {
+          // Reset button
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "Send Message";
+        }
+      });
+    </script>
+  </body>
+</html>
